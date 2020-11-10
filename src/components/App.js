@@ -1,11 +1,13 @@
 import React from "react";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "./childcomponents/Header";
+import InputForm from "./childcomponents/InputForm";
+import Map from "./childcomponents/Map";
+import NotFound from "./childcomponents/NotFound";
 
 export default function App() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [Theme, setTheme] = React.useState("");
   const handleChangeTheme = (theme) => {
     setTheme(theme);
@@ -25,10 +27,22 @@ export default function App() {
       <CssBaseline />
       <Header
         value={Theme}
+        //props from child to parent to handle theme change
         onchangetheme={(e) => {
           handleChangeTheme(e);
         }}
       />
+      <div>
+        <Switch>
+          {/*All routing happens here*/}
+          <Route exact path="/" component={InputForm} />
+          <Route
+            path="/map/:SensorID/:DeviceID"
+            render={(props) => <Map {...props} />}
+          />
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </div>
     </ThemeProvider>
   );
 }
