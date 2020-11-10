@@ -16,7 +16,7 @@ export default function App() {
     () =>
       createMuiTheme({
         palette: {
-          type: Theme ? "light" : "dark",
+          type: Theme ? "light" : "light",
         },
       }),
     [Theme]

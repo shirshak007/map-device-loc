@@ -99,8 +99,21 @@ export default function FindMe() {
   const history = useHistory();
   const [SensorID, setSensorID] = useState("");
   const [DeviceID, setDeviceID] = useState("");
+  const [Error, setError] = useState({
+    ErrorSensor: false,
+    ErrorDevice: false,
+  });
   const FindLocation = () => {
-    history.push("/map/" + SensorID + "/" + DeviceID);
+    if (DeviceID.length > 0 && SensorID.length > 0) {
+      setError({ ...Error, ErrorSensor: false, ErrorDevice: false });
+      history.push("/map/" + SensorID + "/" + DeviceID);
+    } else {
+      setError({
+        ...Error,
+        ErrorSensor: SensorID.length <= 0 ? true : false,
+        ErrorDevice: DeviceID.length <= 0 ? true : false,
+      });
+    }
   };
   return (
     <div className={classes.container}>
@@ -121,6 +134,14 @@ export default function FindMe() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <CssTextField
+                error={Error.ErrorSensor && SensorID.length <= 0 ? true : false}
+                helperText={
+                  Error.ErrorSensor && SensorID.length <= 0
+                    ? "Please Enter Sensor data"
+                    : ""
+                }
+                required
+                id="SensorID"
                 value={SensorID}
                 label="Sensor ID"
                 variant="outlined"
@@ -129,6 +150,14 @@ export default function FindMe() {
             </Grid>
             <Grid item xs={12}>
               <CssTextField
+                error={Error.ErrorDevice && DeviceID.length <= 0 ? true : false}
+                helperText={
+                  Error.ErrorDevice && DeviceID.length <= 0
+                    ? "Please Enter Device Data"
+                    : ""
+                }
+                required
+                id="DeviceID"
                 value={DeviceID}
                 label="Device ID"
                 variant="outlined"

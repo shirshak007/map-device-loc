@@ -1,5 +1,5 @@
 import React from "react";
-import Sentry from "react-activity/lib/Sentry";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default function LoadingAnimation() {
   return (
@@ -14,13 +14,7 @@ export default function LoadingAnimation() {
         paddingBottom: "50px",
       }}
     >
-      <Sentry
-        style={{ width: "100%" }}
-        color="#000000"
-        size={32}
-        speed={1}
-        animating={true}
-      />
+      <CircularProgress />
     </div>
   );
 }
