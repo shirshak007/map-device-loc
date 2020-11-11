@@ -63,7 +63,8 @@ export default function ShowMap(props) {
         console.log(error);
       });
   };
-  console.log(SensorData);
+  //check if refreshing in 10seconds
+  //console.log(SensorData);
   //function call
   useEffect(() => {
     getSensorLocation();

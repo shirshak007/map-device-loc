@@ -6,7 +6,7 @@ import Header from "./childcomponents/Header";
 import InputForm from "./childcomponents/InputForm";
 import Map from "./childcomponents/Map";
 import NotFound from "./childcomponents/NotFound";
-
+import Home from "./childcomponents/Home.js";
 export default function App() {
   const [Theme, setTheme] = React.useState("");
   const handleChangeTheme = (theme) => {
@@ -35,7 +35,8 @@ export default function App() {
       <div>
         <Switch>
           {/*All routing happens here*/}
-          <Route exact path="/" component={InputForm} />
+          <Route exact path="/" component={Home} />
+          <Route path="/select-sensor" component={InputForm} />
           <Route
             path="/map/:SensorID/:DeviceID"
             render={(props) => <Map {...props} />}

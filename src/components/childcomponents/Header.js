@@ -40,15 +40,34 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     color: "black",
   },
+  link: {
+    padding: theme.spacing(2),
+    borderRadius: "10px",
+    marginRight: "10px",
+    textDecoration: "none",
+    fontSize: "1.5em",
+    fontWeight: "500",
+    color: "black",
+    "&:hover": {
+      backgroundColor: theme.palette.success.main,
+      color: "white",
+    },
+  },
 }));
 
 export default function Header(props) {
   const classes = useStyles();
   //animate the title image
   const [title, titleanimation] = useState(true);
+  const [link, linkanimation] = useState(true);
   const { x } = useSpring({
     from: { x: 0 },
     x: title ? 1 : 0,
+    config: { duration: 1000 },
+  });
+  const { y } = useSpring({
+    from: { y: 0 },
+    y: link ? 1 : 0,
     config: { duration: 1000 },
   });
   //handle dark/light theme
@@ -89,6 +108,25 @@ export default function Header(props) {
             </div>
           </NavLink>
         </div>
+        <NavLink
+          onClick={() => linkanimation(!link)}
+          className={classes.link}
+          to="/select-sensor"
+        >
+          <animated.div
+            style={{
+              opacity: y.interpolate({ range: [0, 1], output: [1, 1] }),
+              transform: y
+                .interpolate({
+                  range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
+                  output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
+                })
+                .interpolate((y) => `scale(${y})`),
+            }}
+          >
+            Select Sensor
+          </animated.div>
+        </NavLink>
         <div className={classes.theme}>
           <FormControlLabel
             control={
