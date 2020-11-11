@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     [theme.breakpoints.down("xs")]: {
-      width: "150px",
+      width: "149px",
     },
   },
   image: {
