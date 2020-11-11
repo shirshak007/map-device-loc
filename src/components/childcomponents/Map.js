@@ -1,8 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core";
 import Axios from "axios";
 import qs from "qs";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import LoadingAnimation from "./LoadingAnimation";
-export default function Map(props) {
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(2),
+  },
+  mapcontainer: {
+    padding: theme.spacing(2),
+    width: "75%",
+    [theme.breakpoints.down("sm")]: {
+      width: "90%",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      padding: theme.spacing(1),
+    },
+  },
+}));
+
+export default function ShowMap(props) {
+  const classes = useStyles();
   //getting data from previous view
   const SensorID = props.match.params.SensorID;
   const DeviceID = props.match.params.DeviceID;
@@ -49,20 +74,29 @@ export default function Map(props) {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div>
-      Sensor: {SensorID}
-      <br />
-      Device: {DeviceID}
-      <br />
+    <div className={classes.container}>
       {Loading ? <LoadingAnimation /> : ""}
       {Found ? (
-        <div>
-          lat: {SensorData.latitude}
-          <br />
-          lon: {SensorData.longitude}
+        <div className={classes.mapcontainer}>
+          {/*Displaying the map, The container height and width must be specified*/}
+          <MapContainer
+            center={[SensorData.latitude, SensorData.longitude]}
+            zoom={14}
+            scrollWheelZoom={true}
+            style={{ width: "100%", height: "80vh" }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {/*Displaying the marker, on click shows the sensor ID*/}
+            <Marker position={[SensorData.latitude, SensorData.longitude]}>
+              <Popup>Sensor ID: {SensorID}</Popup>
+            </Marker>
+          </MapContainer>
         </div>
       ) : (
-        "Not Found"
+        ""
       )}
     </div>
   );
