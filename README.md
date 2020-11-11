@@ -1,3 +1,11 @@
+# quick guide
+
+Hope latest version of node.js is installed
+Create an app using create-react-app
+Head toward to the directory and replace all files with the files in the repo.
+Open package.json and install all the dependencies.
+After all dependencies are added just run-> "npm start"
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
