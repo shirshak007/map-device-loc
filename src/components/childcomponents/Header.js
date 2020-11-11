@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    [theme.breakpoints.down("xs")]: {
+      width: "150px",
+    },
   },
   image: {
     width: "100%",
@@ -51,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.success.main,
       color: "white",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1em",
     },
   },
 }));
