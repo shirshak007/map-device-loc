@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles, Grid, useTheme } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { Spring } from "react-spring/renderprops";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Axios from "axios";
 import qs from "qs";
 import LoadingAnimation from "./LoadingAnimation";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import "../../asset/styles.css";
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -72,6 +75,8 @@ export default function ParkingLot(props) {
   const theme = useTheme();
   const [Found, setFound] = useState(false);
   const [Loading, setLoading] = useState(true);
+  const [Changing, setChanging] = useState(true);
+  //media query to maintain app responsive
   const matchesMD = useMediaQuery("(min-width:970px)");
   const matchesSM = useMediaQuery("(min-width:610px)");
   const matchesXS = useMediaQuery("(min-width:500px)");
@@ -80,6 +85,7 @@ export default function ParkingLot(props) {
   //BayData
   const [BayData, setBayData] = useState([]);
   //API Call
+  //getting bay data
   const getBayData = async () => {
     var data = qs.stringify({});
     var config = {
@@ -93,16 +99,18 @@ export default function ParkingLot(props) {
         setBayData(response.data);
         setFound(true);
         setLoading(false);
+        setChanging(false);
       })
       .catch(function (error) {
         setFound(false);
         setLoading(false);
+        setChanging(false);
         console.log(error);
       });
   };
   //changing status on click
   const changeBayStatus = async (bay_id) => {
-    setLoading(true);
+    setChanging(true);
     var data = qs.stringify({});
     var config = {
       method: "post",
@@ -114,12 +122,11 @@ export default function ParkingLot(props) {
       .then(function (response) {
         if (response.data) {
           getBayData();
-          setLoading(false);
         }
       })
       .catch(function (error) {
         setFound(false);
-        setLoading(false);
+        setChanging(false);
         console.log(error);
       });
   };
@@ -127,16 +134,28 @@ export default function ParkingLot(props) {
   useEffect(() => {
     getBayData();
   }, []);
-  console.log(BayData);
+
   return (
     <div className={classes.container}>
-      <h1>Parking Lot</h1>
-      Click on location to Change Status
+      <Spring
+        config={{ tension: 800, friction: 500, precision: 0.9 }}
+        from={{ opacity: 0 }}
+        to={{ opacity: 1 }}
+      >
+        {(props) => (
+          <div style={props}>
+            <h1>PARKING LOT</h1>
+          </div>
+        )}
+      </Spring>
+      Click on Location to Change Status
       {Loading ? <LoadingAnimation /> : ""}
       {Found ? (
         <Grid container className={classes.parkingcontainer}>
           {BayData.map((bay) => {
+            //Three media queries are used to fit fixed sized div maintaining aspect ratio
             if (
+              //media-query for screen > md
               `${matchesMD}` === "true" &&
               `${matchesSM}` === "true" &&
               `${matchesXS}` === "true"
@@ -147,6 +166,7 @@ export default function ParkingLot(props) {
                   key={bay.id}
                   //   className={classes.bay}
                   style={{
+                    //maintaining aspect ratio for all screens
                     left: bay.x,
                     top: bay.y,
                     backgroundColor: bay.active
@@ -157,33 +177,47 @@ export default function ParkingLot(props) {
                   }}
                   onClick={(e) => changeBayStatus(bay.id)}
                 >
-                  <div
-                    className={
-                      bay.width > bay.height
-                        ? classes.baytextrotate
-                        : classes.baytext
-                    }
-                  >
-                    {bay.active ? (
-                      <div className={classes.status}>
-                        <HighlightOffIcon />
-                        Occupied
-                      </div>
-                    ) : (
-                      <div className={classes.status}>
-                        <CheckCircleOutlineIcon />
-                        Free
-                      </div>
-                    )}
-                    <br />
-                    H:{bay.height}
-                    <br /> W:{bay.width}
-                    <br />
-                    X:{bay.x} <br /> Y:{bay.y}
-                  </div>
+                  {Changing ? (
+                    <div
+                      className={
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        //rotate to fit texts in horizontal div
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      {bay.active ? (
+                        <div className={classes.status}>
+                          <HighlightOffIcon />
+                          Occupied
+                        </div>
+                      ) : (
+                        <div className={classes.status}>
+                          <CheckCircleOutlineIcon />
+                          Free
+                        </div>
+                      )}
+                      <br />
+                      H:{bay.height}
+                      <br /> W:{bay.width}
+                      <br />
+                      X:{bay.x} <br /> Y:{bay.y}
+                    </div>
+                  )}
                 </div>
               );
             } else if (
+              //media-query for screen > sm
               `${matchesMD}` === "false" &&
               `${matchesSM}` === "true" &&
               `${matchesXS}` === "true"
@@ -194,6 +228,7 @@ export default function ParkingLot(props) {
                   key={bay.id}
                   //   className={classes.bay}
                   style={{
+                    //maintaining aspect ratio for all screens
                     left: bay.x / 1.5,
                     top: bay.y / 1.5,
                     backgroundColor: bay.active
@@ -204,39 +239,51 @@ export default function ParkingLot(props) {
                   }}
                   onClick={(e) => changeBayStatus(bay.id)}
                 >
-                  <div
-                    className={
-                      bay.width > bay.height
-                        ? classes.baytextrotate
-                        : classes.baytext
-                    }
-                  >
-                    {bay.active ? (
-                      <div className={classes.status}>
-                        <HighlightOffIcon />
-                        Occupied
-                      </div>
-                    ) : (
-                      <div className={classes.status}>
-                        <CheckCircleOutlineIcon />
-                        Free
-                      </div>
-                    )}
-                    <br />
-                    H:{bay.height}
-                    <br /> W:{bay.width}
-                    <br />
-                    X:{bay.x} <br /> Y:{bay.y}
-                  </div>
+                  {Changing ? (
+                    <div
+                      className={
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      <CircularProgress />
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        //rotate to fit texts in horizontal div
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      {bay.active ? (
+                        <div className={classes.status}>
+                          <HighlightOffIcon />
+                          Occupied
+                        </div>
+                      ) : (
+                        "Free"
+                      )}
+                      <br />
+                      H:{bay.height}
+                      <br /> W:{bay.width}
+                      <br />
+                      X:{bay.x} <br /> Y:{bay.y}
+                    </div>
+                  )}
                 </div>
               );
             } else {
+              //media-query for screen > xs
               return (
                 <div
                   id="bay"
                   key={bay.id}
                   //   className={classes.bay}
                   style={{
+                    //maintaining aspect ratio for all screens
                     left: bay.x / 2.5,
                     top: bay.y / 2.5,
                     backgroundColor: bay.active
@@ -247,30 +294,48 @@ export default function ParkingLot(props) {
                   }}
                   onClick={(e) => changeBayStatus(bay.id)}
                 >
-                  <div
-                    className={
-                      bay.width > bay.height
-                        ? classes.baytextrotate
-                        : classes.baytext
-                    }
-                  >
-                    {bay.active ? (
-                      <div className={classes.status}>
-                        <HighlightOffIcon />
-                        Occupied
+                  {Changing ? (
+                    <div
+                      className={
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      <div
+                        className={
+                          bay.width > bay.height
+                            ? classes.baytextrotate
+                            : classes.baytext
+                        }
+                      >
+                        <CircularProgress />
                       </div>
-                    ) : (
-                      <div className={classes.status}>
-                        <CheckCircleOutlineIcon />
-                        Free
-                      </div>
-                    )}
-                    <br />
-                    H:{bay.height}
-                    <br /> W:{bay.width}
-                    <br />
-                    X:{bay.x} <br /> Y:{bay.y}
-                  </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        //rotate to fit texts in horizontal div
+                        bay.width > bay.height
+                          ? classes.baytextrotate
+                          : classes.baytext
+                      }
+                    >
+                      {bay.active ? (
+                        <div className={classes.status}>
+                          <HighlightOffIcon />
+                          Occupied
+                        </div>
+                      ) : (
+                        "Free"
+                      )}
+                      <br />
+                      H:{bay.height}
+                      <br /> W:{bay.width}
+                      <br />
+                      X:{bay.x} <br /> Y:{bay.y}
+                    </div>
+                  )}
                 </div>
               );
             }

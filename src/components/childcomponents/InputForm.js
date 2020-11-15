@@ -128,7 +128,7 @@ export default function FindMe() {
           component="h1"
           variant="h5"
         >
-          Find Me
+          Select Sensor
         </Typography>
         {/*input form body*/}
         <div className={classes.form}>
