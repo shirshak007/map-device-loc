@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FindMe() {
   const classes = useStyles();
-  const [toggle, set] = useState(true);
+  const toggle = useState(true);
   const trail = useTrail(items.length, {
     config,
     opacity: toggle ? 1 : 0,

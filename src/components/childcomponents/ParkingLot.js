@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: "20px",
   },
   parkingcontainer: {
     display: "flex",
@@ -65,6 +66,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   status: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  statusrotate: {
+    transform: "rotate(+90deg)",
+    webkitTransform: "rotate(+89deg)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -211,12 +220,24 @@ export default function ParkingLot(props) {
                       }
                     >
                       {bay.active ? (
-                        <div className={classes.status}>
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
                           <HighlightOffIcon />
                           Occupied
                         </div>
                       ) : (
-                        <div className={classes.status}>
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
                           <CheckCircleOutlineIcon />
                           Free
                         </div>
@@ -273,12 +294,27 @@ export default function ParkingLot(props) {
                       }
                     >
                       {bay.active ? (
-                        <div className={classes.status}>
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
                           <HighlightOffIcon />
                           Occupied
                         </div>
                       ) : (
-                        "Free"
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
+                          <CheckCircleOutlineIcon />
+                          Free
+                        </div>
                       )}
                       <br />
                       H:{bay.height}
@@ -336,12 +372,27 @@ export default function ParkingLot(props) {
                       }
                     >
                       {bay.active ? (
-                        <div className={classes.status}>
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
                           <HighlightOffIcon />
                           Occupied
                         </div>
                       ) : (
-                        "Free"
+                        <div
+                          className={
+                            bay.width > bay.height
+                              ? classes.statusrotate
+                              : classes.status
+                          }
+                        >
+                          <CheckCircleOutlineIcon />
+                          Free
+                        </div>
                       )}
                       <br />
                       H:{bay.height}
@@ -356,7 +407,7 @@ export default function ParkingLot(props) {
           })}
           <Snackbar
             open={OpenSnackBar}
-            autoHideDuration={6000}
+            autoHideDuration={3000}
             onClose={handleClose}
           >
             <Alert onClose={handleClose} severity="success">
