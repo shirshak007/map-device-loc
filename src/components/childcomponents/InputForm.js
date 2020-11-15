@@ -173,7 +173,7 @@ export default function FindMe() {
                 className={classes.submit}
                 onClick={FindLocation}
               >
-                Find
+                Submit
               </Button>
             </Grid>
           </Grid>

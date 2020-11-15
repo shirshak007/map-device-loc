@@ -4,6 +4,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { Spring } from "react-spring/renderprops";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import Axios from "axios";
 import qs from "qs";
 import LoadingAnimation from "./LoadingAnimation";
@@ -69,13 +71,24 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
 }));
-
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 export default function ParkingLot(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [Found, setFound] = useState(false);
   const [Loading, setLoading] = useState(true);
   const [Changing, setChanging] = useState(true);
+  const [bay_id, setbay_id] = useState("");
+  const [OpenSnackBar, setOpenSnackBar] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackBar(false);
+  };
   //media query to maintain app responsive
   const matchesMD = useMediaQuery("(min-width:970px)");
   const matchesSM = useMediaQuery("(min-width:610px)");
@@ -111,7 +124,9 @@ export default function ParkingLot(props) {
   //changing status on click
   const changeBayStatus = async (bay_id) => {
     setChanging(true);
+    setbay_id(bay_id);
     var data = qs.stringify({});
+    setOpenSnackBar(true);
     var config = {
       method: "post",
       url: "http://34.71.252.163:5000/parking/bay/" + bay_id + "/toggle",
@@ -125,7 +140,6 @@ export default function ParkingLot(props) {
         }
       })
       .catch(function (error) {
-        setFound(false);
         setChanging(false);
         console.log(error);
       });
@@ -340,6 +354,15 @@ export default function ParkingLot(props) {
               );
             }
           })}
+          <Snackbar
+            open={OpenSnackBar}
+            autoHideDuration={6000}
+            onClose={handleClose}
+          >
+            <Alert onClose={handleClose} severity="success">
+              Status Updated for Bay: {bay_id}
+            </Alert>
+          </Snackbar>
         </Grid>
       ) : (
         ""
