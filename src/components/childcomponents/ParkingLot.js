@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles, Grid, useTheme } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import Axios from "axios";
 import qs from "qs";
 import LoadingAnimation from "./LoadingAnimation";
@@ -58,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "8px",
     },
   },
+  status: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }));
 
 export default function ParkingLot(props) {
@@ -81,12 +88,34 @@ export default function ParkingLot(props) {
       headers: {},
       data: data,
     };
-
     await Axios(config)
       .then(function (response) {
         setBayData(response.data);
         setFound(true);
         setLoading(false);
+      })
+      .catch(function (error) {
+        setFound(false);
+        setLoading(false);
+        console.log(error);
+      });
+  };
+  //changing status on click
+  const changeBayStatus = async (bay_id) => {
+    setLoading(true);
+    var data = qs.stringify({});
+    var config = {
+      method: "post",
+      url: "http://34.71.252.163:5000/parking/bay/" + bay_id + "/toggle",
+      headers: {},
+      data: data,
+    };
+    await Axios(config)
+      .then(function (response) {
+        if (response.data) {
+          getBayData();
+          setLoading(false);
+        }
       })
       .catch(function (error) {
         setFound(false);
@@ -102,6 +131,7 @@ export default function ParkingLot(props) {
   return (
     <div className={classes.container}>
       <h1>Parking Lot</h1>
+      Click on location to Change Status
       {Loading ? <LoadingAnimation /> : ""}
       {Found ? (
         <Grid container className={classes.parkingcontainer}>
@@ -125,6 +155,7 @@ export default function ParkingLot(props) {
                     height: bay.height,
                     width: bay.width,
                   }}
+                  onClick={(e) => changeBayStatus(bay.id)}
                 >
                   <div
                     className={
@@ -133,7 +164,17 @@ export default function ParkingLot(props) {
                         : classes.baytext
                     }
                   >
-                    {bay.active ? "Occupied" : "Free"}
+                    {bay.active ? (
+                      <div className={classes.status}>
+                        <HighlightOffIcon />
+                        Occupied
+                      </div>
+                    ) : (
+                      <div className={classes.status}>
+                        <CheckCircleOutlineIcon />
+                        Free
+                      </div>
+                    )}
                     <br />
                     H:{bay.height}
                     <br /> W:{bay.width}
@@ -161,6 +202,7 @@ export default function ParkingLot(props) {
                     height: bay.height / 1.5,
                     width: bay.width / 1.5,
                   }}
+                  onClick={(e) => changeBayStatus(bay.id)}
                 >
                   <div
                     className={
@@ -169,7 +211,17 @@ export default function ParkingLot(props) {
                         : classes.baytext
                     }
                   >
-                    {bay.active ? "Occupied" : "Free"}
+                    {bay.active ? (
+                      <div className={classes.status}>
+                        <HighlightOffIcon />
+                        Occupied
+                      </div>
+                    ) : (
+                      <div className={classes.status}>
+                        <CheckCircleOutlineIcon />
+                        Free
+                      </div>
+                    )}
                     <br />
                     H:{bay.height}
                     <br /> W:{bay.width}
@@ -193,6 +245,7 @@ export default function ParkingLot(props) {
                     height: bay.height / 2,
                     width: bay.width / 2,
                   }}
+                  onClick={(e) => changeBayStatus(bay.id)}
                 >
                   <div
                     className={
@@ -201,7 +254,17 @@ export default function ParkingLot(props) {
                         : classes.baytext
                     }
                   >
-                    {bay.active ? "Occupied" : "Free"}
+                    {bay.active ? (
+                      <div className={classes.status}>
+                        <HighlightOffIcon />
+                        Occupied
+                      </div>
+                    ) : (
+                      <div className={classes.status}>
+                        <CheckCircleOutlineIcon />
+                        Free
+                      </div>
+                    )}
                     <br />
                     H:{bay.height}
                     <br /> W:{bay.width}
