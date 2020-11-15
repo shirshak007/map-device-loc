@@ -5,11 +5,11 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Axios from "axios";
 import qs from "qs";
 import LoadingAnimation from "./LoadingAnimation";
-
+import "../../asset/styles.css";
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     top: "10px",
     background: "#b5e7a0",
     position: "relative",
-
     [theme.breakpoints.down("sm")]: {
       width: "640px",
       height: "480px",
@@ -30,6 +29,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       width: "420px",
       height: "300px",
+    },
+  },
+  bay: {
+    position: "absolute",
+    cursor: "pointer",
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "yellow",
     },
   },
   baytextrotate: {
@@ -90,6 +101,7 @@ export default function ParkingLot(props) {
   console.log(BayData);
   return (
     <div className={classes.container}>
+      <h1>Parking Lot</h1>
       {Loading ? <LoadingAnimation /> : ""}
       {Found ? (
         <Grid container className={classes.parkingcontainer}>
@@ -101,9 +113,10 @@ export default function ParkingLot(props) {
             ) {
               return (
                 <div
+                  id="bay"
                   key={bay.id}
+                  //   className={classes.bay}
                   style={{
-                    position: "absolute",
                     left: bay.x,
                     top: bay.y,
                     backgroundColor: bay.active
@@ -111,12 +124,6 @@ export default function ParkingLot(props) {
                       : theme.palette.success.dark,
                     height: bay.height,
                     width: bay.width,
-                    cursor: "pointer",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    color: "white",
                   }}
                 >
                   <div
@@ -142,9 +149,10 @@ export default function ParkingLot(props) {
             ) {
               return (
                 <div
+                  id="bay"
                   key={bay.id}
+                  //   className={classes.bay}
                   style={{
-                    position: "absolute",
                     left: bay.x / 1.5,
                     top: bay.y / 1.5,
                     backgroundColor: bay.active
@@ -152,12 +160,6 @@ export default function ParkingLot(props) {
                       : theme.palette.success.dark,
                     height: bay.height / 1.5,
                     width: bay.width / 1.5,
-                    cursor: "pointer",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    color: "white",
                   }}
                 >
                   <div
@@ -179,9 +181,10 @@ export default function ParkingLot(props) {
             } else {
               return (
                 <div
+                  id="bay"
                   key={bay.id}
+                  //   className={classes.bay}
                   style={{
-                    position: "absolute",
                     left: bay.x / 2.5,
                     top: bay.y / 2.5,
                     backgroundColor: bay.active
@@ -189,12 +192,6 @@ export default function ParkingLot(props) {
                       : theme.palette.success.dark,
                     height: bay.height / 2,
                     width: bay.width / 2,
-                    cursor: "pointer",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    color: "white",
                   }}
                 >
                   <div
