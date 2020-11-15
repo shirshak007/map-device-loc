@@ -106,7 +106,8 @@ export default function FindMe() {
   const FindLocation = () => {
     if (DeviceID.length > 0 && SensorID.length > 0) {
       setError({ ...Error, ErrorSensor: false, ErrorDevice: false });
-      history.push("/map/" + SensorID + "/" + DeviceID);
+      // history.push("/map/" + SensorID + "/" + DeviceID); /*For Round 1*/
+      history.push("/lot/" + DeviceID); /*For Round 2*/
     } else {
       setError({
         ...Error,

@@ -5,6 +5,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Header from "./childcomponents/Header";
 import InputForm from "./childcomponents/InputForm";
 import Map from "./childcomponents/Map";
+import ParkingLot from "./childcomponents/ParkingLot";
 import NotFound from "./childcomponents/NotFound";
 import Home from "./childcomponents/Home.js";
 export default function App() {
@@ -40,6 +41,10 @@ export default function App() {
           <Route
             path="/map/:SensorID/:DeviceID"
             render={(props) => <Map {...props} />}
+          />
+          <Route
+            path="/lot/:DeviceID"
+            render={(props) => <ParkingLot {...props} />}
           />
           <Route path="*" component={NotFound} />
         </Switch>
