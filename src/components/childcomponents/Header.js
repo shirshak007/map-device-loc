@@ -78,13 +78,16 @@ export default function Header(props) {
   });
   //handle dark/light theme
   const [state, setState] = React.useState({
-    CheckedDark: true,
+    CheckedDark: localStorage.getItem("Theme") === "dark" ? true : false,
   });
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
-    props.onchangetheme(state.CheckedDark);
+    localStorage.setItem("Theme", event.target.checked ? "dark" : "light");
+    window.location.reload(false);
   };
+  //console.log(state.CheckedDark);
+  //console.log(localStorage.getItem("Theme"));
 
   return (
     <AppBar className={classes.root}>

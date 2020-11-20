@@ -17,12 +17,12 @@ export default function App() {
     () =>
       createMuiTheme({
         palette: {
-          type: Theme ? "light" : "dark",
+          type: localStorage.getItem("Theme") === "dark" ? "dark" : "light",
         },
       }),
-    [Theme]
+    []
   );
-
+  //console.log(theme);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
